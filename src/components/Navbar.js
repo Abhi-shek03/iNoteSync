@@ -10,11 +10,15 @@ const Navbar = () => {
     }
     let location = useLocation();
 
+    const inlineStyles = {
+        backgroundColor: '#FCF6F5'
+    }
+
     return (
         <div>
-            <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+            <nav className="navbar navbar-expand-lg " style={inlineStyles}>
                 <div className="container-fluid">
-                    <Link className="navbar-brand" to="/">iNoteeBoook</Link>
+                    <Link className="navbar-brand" to="/">iNoteSync</Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
@@ -29,9 +33,9 @@ const Navbar = () => {
                         </ul>
                         {!localStorage.getItem('token')?
                         <form className="d-flex"> 
-                    <Link className="btn btn-primary mx-1" to="/login" role="button">Login</Link>
-                    <Link className="btn btn-primary mx-1" to="/signup" role="button">Signup</Link>
-                    </form>: <button onClick={handleLogout} className='btn btn-primary'>Logout</button>}
+                    <Link className="btn btn-secondary mx-1" to="/login" role="button">Login</Link>
+                    <Link className="btn btn-secondary mx-1" to="/signup" role="button">Signup</Link>
+                    </form>: <button onClick={handleLogout} className='btn btn-primary-logout'>Logout</button>}
                 </div>
             </div>
             </nav>

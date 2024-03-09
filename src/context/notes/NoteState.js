@@ -49,6 +49,7 @@ const NoteState = (props) => {
             },
         });
         const json = response.json();
+        console.log(json);
 
         // Logic to delete note
         const newNote = notes.filter((note) => { return note._id !== id })
@@ -66,6 +67,7 @@ const NoteState = (props) => {
             body: JSON.stringify({Title, Description, Tag}),
         });
         const json = response.json();
+        console.log(json);
 
 
         let newNotes = JSON.parse(JSON.stringify(notes))
