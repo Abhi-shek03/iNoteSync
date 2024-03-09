@@ -12,9 +12,10 @@ router.post('/signup',[
     body('email', 'Enter a valid email').isEmail(),
     body('password', 'Password must be atleast 5 characters').isLength({ min: 5 }),
 ] , async (req, res)=>{ 
+  let success = true;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success, errors: errors.array() });
     }
 
     try {
@@ -22,7 +23,7 @@ router.post('/signup',[
       
       let user = await User.findOne({email: req.body.email})
       if (user){
-        return res.status(400).json({error: "Sorry a user with this email already exists"})
+        return res.status(400).json({success,   error: "Sorry a user with this email already exists"})
       }
 
       // Hashing password
@@ -42,7 +43,8 @@ router.post('/signup',[
         }
       }
       const token = jwt.sign( data , 'shhhhh');
-      res.json({token})
+      success = true;
+      res.json({success, token})
 
     } catch (error) {
       console.error(error.message);
@@ -57,6 +59,7 @@ router.post('/login',[
   body('email', 'Enter a valid email').isEmail(),
   body('password', 'Password cannot be blank').exists(),
 ] , async (req, res)=>{ 
+  let success = false;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -66,12 +69,14 @@ const {email, password} = req.body;
 try {
   let user = await User.findOne({email});
   if (!user){
-    return res.status(400).json({error : "Please try to login with correct credientials"})
+    return res.status(400).json({success, error : "Please try to login with correct credientials"})
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password)
   if (!passwordCompare){
-    return res.status(400).json({error : "Please try to login with correct credientials"})
+    if (!success) {
+      return res.status(400).json({success, error : "Please try to login with correct credientials"})
+    }
   }
 
   const data = {
@@ -80,7 +85,8 @@ try {
     }
   }
   const token = jwt.sign( data , 'shhhhh');
-  res.json({token})
+  success = true;
+  res.json({ success, token})
 
 } catch (error) {
       console.error(error.message);
